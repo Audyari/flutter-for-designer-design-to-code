@@ -1,61 +1,164 @@
+How to build Adaptive UI with Flutter
 
+====================================================
 
-preview UI
+1. SafeArea di Flutter adalah widget yang memastikan konten aplikasi tidak tertutupi oleh elemen sistem operasi, seperti notifikasi, status bar, atau navigasi di perangkat.
 
-===================
-
-https://www.figma.com/design/x5n56KQAEAwMDYKyaKsEYX/Chatty?node-id=1-2&t=f7z1dQoRgAlc8xKJ-0
-
-simple colom and blog :
-
-main. dart : 
+contoh : 
 
 import 'package:flutter/material.dart';
-import 'package:myapp/home_page.dart';
 
-void main() => runApp(const MyApp());
+void main() {
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      debugShowCheckedModeBanner: false,
+    return MaterialApp(
+      title: 'My App with Safe AppBar',
       home: HomePage(),
     );
   }
 }
 
-
-====================================
-
-home_page.dart
-
-
-import 'package:flutter/material.dart';
-
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Home Page'),
+      body: SafeArea(
+        child: Column(
+          children: [
+            SafeArea(
+              child: AppBar(
+                title: Text('Home Page'),
+              ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.all(16.0),
+                child: Center(
+                  child: Text(
+                    'Ini adalah konten di dalam SafeArea',
+                    style: TextStyle(
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
-      body: const SafeArea(
-        child: SingleChildScrollView(
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text('Row 1'),
-                SizedBox(height: 20),
-                Text('Row 2'),
-                SizedBox(height: 20),
-                Text('Row 3'),
-              ],
+    );
+  }
+}
+===================================
+
+2. MediaQuery di Flutter adalah sebuah widget yang menyediakan informasi tentang ukuran dan orientasi layar perangkat saat ini.
+
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'MediaQuery Example',
+      home: HomePage(),
+    );
+  }
+}
+
+class HomePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    // Dapatkan informasi ukuran layar
+    final screenSize = MediaQuery.of(context).size;
+    final screenWidth = screenSize.width;
+    final screenHeight = screenSize.height;
+
+    // Dapatkan informasi orientasi layar
+    final screenOrientation = MediaQuery.of(context).orientation;
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('MediaQuery Example'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Lebar layar: ${screenWidth.toStringAsFixed(2)} dp',
+              style: TextStyle(fontSize: 18.0),
+            ),
+            SizedBox(height: 16.0),
+            Text(
+              'Tinggi layar: ${screenHeight.toStringAsFixed(2)} dp',
+              style: TextStyle(fontSize: 18.0),
+            ),
+            SizedBox(height: 16.0),
+            Text(
+              'Orientasi layar: $screenOrientation',
+              style: TextStyle(fontSize: 18.0),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+=========================================
+
+3. Fungsi GridView di Flutter adalah untuk menampilkan item-item dalam tampilan grid (kisi-kisi) pada layar.
+
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'GridView Example',
+      home: HomePage(),
+    );
+  }
+}
+
+class HomePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SafeArea(
+        child: GridView.count(
+          crossAxisCount: 4, // Jumlah kolom dalam grid
+          childAspectRatio: 1.0, // Rasio aspek anak-anak dalam grid
+          mainAxisSpacing: 16.0, // Jarak vertikal antar item
+          crossAxisSpacing: 16.0, // Jarak horizontal antar item
+          padding: EdgeInsets.all(16.0), // Padding di sekitar grid
+          children: List.generate(
+            12, // Jumlah item dalam grid
+            (index) => Container(
+              color: Colors
+                  .blue[100 * ((index + 1) % 9)], // Warna latar belakang item
+              child: Center(
+                child: Text(
+                  'Item $index', // Teks yang ditampilkan pada item
+                  style: TextStyle(
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
             ),
           ),
         ),
@@ -65,4 +168,203 @@ class HomePage extends StatelessWidget {
 }
 
 
-===============================================
+=================================================
+
+4. diatas nya grid : SliverGrid DelegateWithFixedCrossAxisCount adalah salah satu delegate yang digunakan dalam SliverGrid untuk mengatur tata letak grid dalam arah lintas sumbu (cross-axis).
+
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Sliver Grid Example',
+      home: HomePage(),
+    );
+  }
+}
+
+class HomePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            title: Text('Sliver Grid Example'),
+            floating: true,
+            snap: true,
+          ),
+          SliverGrid(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3, // Jumlah kolom
+              childAspectRatio: 1.0, // Rasio aspek anak-anak
+              mainAxisSpacing: 16.0, // Jarak vertikal antar item
+              crossAxisSpacing: 16.0, // Jarak horizontal antar item
+            ),
+            delegate: SliverChildBuilderDelegate(
+              (BuildContext context, int index) {
+                return Container(
+                  color: Colors.blue[100 * ((index + 1) % 9)],
+                  child: Center(
+                    child: Text(
+                      'Item $index',
+                      style: TextStyle(
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                );
+              },
+              childCount: 10, // Jumlah item dalam grid
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+
+========================================
+
+5. menentukan ukuran maksimum lebar setiap item grid.
+
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'SliverGrid with maxCrossAxisExtent',
+      home: HomePage(),
+    );
+  }
+}
+
+class HomePage extends StatefulWidget {
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('SliverGrid Example'),
+      ),
+      body: CustomScrollView(
+        slivers: [
+          SliverGrid(
+            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+              maxCrossAxisExtent: 150.0, // Ukuran maksimum lebar setiap item
+              mainAxisSpacing: 16.0,
+              crossAxisSpacing: 16.0,
+              childAspectRatio: 1.0, // Rasio aspek 1:1
+            ),
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
+                return Container(
+                  color: Colors.blue[100 * ((index + 1) % 9)],
+                  child: Center(
+                    child: Text('Item $index'),
+                  ),
+                );
+              },
+              childCount: 20, // Jumlah item dalam grid
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: SizedBox(height: 16.0),
+          ),
+          SliverGrid(
+            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+              maxCrossAxisExtent: 150.0, // Ukuran maksimum lebar setiap item
+              mainAxisSpacing: 16.0,
+              crossAxisSpacing: 16.0,
+              childAspectRatio: 1.0, // Rasio aspek 1:1
+            ),
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
+                return Container(
+                  color: Colors.blue[100 * ((index + 1) % 9)],
+                  child: Center(
+                    child: Text('Item $index'),
+                  ),
+                );
+              },
+              childCount: 20, // Jumlah item dalam grid
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+
+=================
+
+6. foldables : fitur yang memungkinkan aplikasi Flutter dapat beradaptasi dengan perangkat layar lipat (foldable devices) dengan baik. 
+
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Foldable Demo',
+      home: FoldableWidget(),
+    );
+  }
+}
+
+class FoldableWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isPortrait = constraints.maxWidth < constraints.maxHeight;
+        final isFolded = constraints.maxWidth < 600;
+
+        return Scaffold(
+          appBar: AppBar(
+            title: Text('Foldable Demo'),
+          ),
+          body: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (isFolded)
+                  Text('Device is folded')
+                else
+                  Text('Device is unfolded'),
+                SizedBox(height: 16),
+                if (isPortrait)
+                  Text('Portrait mode')
+                else
+                  Text('Landscape mode'),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+=======================================
